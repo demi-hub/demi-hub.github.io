@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demitrial D — Python Backend & AI Engineer</title>
+<meta name="description" content="Demitrial D — Python Backend Developer and AI Engineer specializing in FastAPI, Django, and RAG pipelines.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0B1120;
+    --panel:#121A2C;
+    --panel-2:#0E1526;
+    --line:#232C42;
+    --text:#E7ECF5;
+    --muted:#8592AD;
+    --amber:#E8B34A;
+    --amber-dim:#3A2F1A;
+    --coral:#FF6B5D;
+    --teal:#4FD1C5;
+    --maxw:1040px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--ink);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--amber);color:#1a1200;}
+  a{color:inherit;}
+  svg{display:block;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  h1,h2,h3{font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:-0.01em;}
+
+  /* ---------- NAV ---------- */
+  header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(11,17,32,0.85);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  nav.wrap{
+    display:flex;align-items:center;justify-content:space-between;
+    height:68px;gap:16px;
+  }
+  .brand{display:flex;flex-direction:column;line-height:1.25;}
+  .brand-name{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;letter-spacing:-0.01em;color:var(--text);}
+  .brand-title{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--amber);letter-spacing:0.01em;margin-top:2px;}
+  @media(max-width:520px){.brand-title{display:none;}}
+  .navlinks{display:none;gap:28px;list-style:none;}
+  .navlinks a{
+    font-size:13px;color:var(--muted);text-decoration:none;
+    font-family:'JetBrains Mono',monospace;
+    transition:color .15s ease;
+  }
+  .navlinks a:hover{color:var(--amber);}
+  @media(min-width:760px){.navlinks{display:flex;}}
+  .resume-btn{
+    font-family:'JetBrains Mono',monospace;font-size:12px;
+    border:1px solid var(--line);color:var(--text);text-decoration:none;
+    padding:8px 14px;border-radius:4px;transition:border-color .15s ease,color .15s ease;
+    white-space:nowrap;
+  }
+  .resume-btn:hover{border-color:var(--amber);color:var(--amber);}
+
+  /* ---------- HERO ---------- */
+  .hero{padding:80px 0 56px;}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--teal);
+    display:flex;align-items:center;gap:9px;margin-bottom:20px;
+  }
+  .dot{width:6px;height:6px;border-radius:50%;background:var(--teal);display:inline-block;flex-shrink:0;
+    animation:pulse 1.8s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.35;}}
+  .hero h1{font-size:clamp(32px,5.2vw,54px);line-height:1.08;max-width:760px;}
+  .hero h1 .accent{color:var(--amber);}
+  .hero p.lede{
+    margin-top:22px;max-width:600px;color:var(--muted);font-size:16px;line-height:1.7;
+  }
+  .hero-links{display:flex;gap:12px;margin-top:32px;flex-wrap:wrap;}
+  .btn{
+    font-family:'JetBrains Mono',monospace;font-size:13px;
+    padding:10px 16px;border-radius:4px;text-decoration:none;
+    display:inline-flex;align-items:center;gap:9px;
+    transition:transform .15s ease,opacity .15s ease;
+  }
+  .btn svg{width:15px;height:15px;flex-shrink:0;}
+  .btn:hover{transform:translateY(-1px);}
+  .btn-primary{background:var(--amber);color:#1a1200;font-weight:500;}
+  .btn-ghost{border:1px solid var(--line);color:var(--text);}
+  .btn-ghost:hover{border-color:var(--amber);}
+
+  /* ---------- PIPELINE TRACE (signature element) ---------- */
+  .trace{margin-top:60px;overflow-x:auto;padding-bottom:6px;}
+  .trace-track{
+    position:relative;
+    display:flex;align-items:center;
+    gap:0;
+    min-width:820px;
+    padding:28px 0 40px;
+  }
+  .trace-line{
+    position:absolute;left:0;right:0;top:50%;height:1px;
+    background:var(--line);
+    transform:translateY(-50%);
+  }
+  .trace-progress{
+    position:absolute;left:0;top:50%;height:1px;
+    background:linear-gradient(90deg, var(--amber), var(--teal));
+    transform:translateY(-50%);
+    width:0%;
+    animation:fill-trace 5.5s ease-in-out infinite;
+  }
+  @keyframes fill-trace{
+    0%{width:0%;}
+    45%{width:100%;}
+    70%{width:100%;}
+    100%{width:100%;opacity:0;}
+  }
+  .trace-node{
+    position:relative;z-index:2;flex:1;display:flex;flex-direction:column;align-items:center;gap:10px;
+  }
+  .trace-node .ring{
+    width:13px;height:13px;border-radius:50%;
+    background:var(--panel);border:2px solid var(--amber);
+  }
+  .trace-node .label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text);text-align:center;line-height:1.4;padding:0 6px;}
+  @media(prefers-reduced-motion: reduce){
+    .trace-progress{animation:none;width:100%;opacity:1;}
+  }
+
+  /* ---------- SECTION SHELL ---------- */
+  section{padding:64px 0;border-top:1px solid var(--line);}
+  .section-head{display:flex;align-items:baseline;gap:14px;margin-bottom:36px;}
+  .section-head .idx{font-family:'JetBrains Mono',monospace;color:var(--amber);font-size:13px;}
+  .section-head h2{font-size:24px;}
+  .section-sub{color:var(--muted);font-size:14px;margin-top:6px;max-width:560px;}
+
+  /* ---------- SUMMARY ---------- */
+  .summary p{color:var(--muted);font-size:16px;max-width:720px;}
+  .summary strong{color:var(--text);font-weight:500;}
+
+  /* ---------- SKILLS ---------- */
+  .skill-groups{display:grid;grid-template-columns:1fr;gap:22px;}
+  @media(min-width:640px){.skill-groups{grid-template-columns:1fr 1fr;}}
+  .skill-group h3{
+    font-family:'JetBrains Mono',monospace;font-size:12px;text-transform:lowercase;
+    color:var(--teal);font-weight:500;margin-bottom:12px;letter-spacing:0.02em;
+  }
+  .chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{
+    font-family:'JetBrains Mono',monospace;font-size:12px;
+    background:var(--panel);border:1px solid var(--line);color:var(--text);
+    padding:6px 10px;border-radius:4px;
+  }
+
+  /* ---------- EXPERIENCE (git-log style) ---------- */
+  .commit{padding:26px 0;border-bottom:1px solid var(--line);}
+  .commit:last-child{border-bottom:none;padding-bottom:0;}
+  .commit-head{display:flex;flex-wrap:wrap;align-items:center;gap:12px 14px;margin-bottom:6px;}
+  .commit-icon{
+    width:30px;height:30px;border-radius:7px;background:var(--panel-2);
+    border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;color:var(--amber);flex-shrink:0;
+  }
+  .commit-icon svg{width:16px;height:16px;}
+  .commit-role{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;}
+  .commit-meta{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);margin-left:auto;}
+  .commit ul{margin-top:12px;padding-left:20px;color:var(--muted);font-size:14.5px;}
+  .commit li{margin-bottom:7px;}
+  .commit li::marker{color:var(--teal);}
+
+  /* ---------- PROJECTS ---------- */
+  .projects{display:grid;grid-template-columns:1fr;gap:18px;}
+  @media(min-width:760px){.projects{grid-template-columns:repeat(3,1fr);}}
+  .card{
+    background:var(--panel);border:1px solid var(--line);border-radius:8px;
+    padding:22px;display:flex;flex-direction:column;gap:12px;
+  }
+  .card-icon{
+    width:42px;height:42px;border-radius:9px;background:var(--panel-2);
+    border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;color:var(--amber);
+  }
+  .card-icon svg{width:22px;height:22px;}
+  .card h3{font-size:16px;}
+  .card .tech{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--teal);}
+  .card p{color:var(--muted);font-size:13.5px;flex-grow:1;}
+  .card ul{padding-left:18px;color:var(--muted);font-size:13.5px;}
+  .card li{margin-bottom:5px;}
+  .card li::marker{color:var(--amber);}
+
+  /* ---------- EDUCATION ---------- */
+  .edu-row{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 16px;}
+  .edu-row h3{font-size:17px;}
+  .edu-row .meta{color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:12.5px;}
+  .edu-cgpa{margin-top:8px;color:var(--muted);font-size:14px;}
+  .edu-cgpa strong{color:var(--amber);}
+
+  /* ---------- CONTACT / FOOTER ---------- */
+  footer{padding:56px 0 40px;border-top:1px solid var(--line);}
+  .contact-grid{display:flex;flex-wrap:wrap;gap:14px;margin-top:24px;}
+  .contact-item{
+    display:flex;align-items:center;gap:10px;
+    background:var(--panel);border:1px solid var(--line);border-radius:6px;
+    padding:12px 16px;font-family:'JetBrains Mono',monospace;font-size:13px;
+    text-decoration:none;color:var(--text);
+    transition:border-color .15s ease;
+  }
+  .contact-item svg{width:16px;height:16px;color:var(--amber);flex-shrink:0;}
+  .contact-item:hover{border-color:var(--amber);}
+  .foot-note{margin-top:40px;color:var(--muted);font-size:12px;font-family:'JetBrains Mono',monospace;}
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <div class="brand">
+      <span class="brand-name">Demitrial D</span>
+      <span class="brand-title">Python Backend &amp; AI Engineer</span>
+    </div>
+    <ul class="navlinks">
+      <li><a href="#summary">summary</a></li>
+      <li><a href="#skills">skills</a></li>
+      <li><a href="#experience">experience</a></li>
+      <li><a href="#projects">projects</a></li>
+      <li><a href="#contact">contact</a></li>
+    </ul>
+    <a class="resume-btn" href="mailto:demitrial236@gmail.com">get in touch</a>
+  </nav>
+</header>
+
+<main>
+  <section class="hero" style="border-top:none;">
+    <div class="wrap">
+      <div class="eyebrow"><span class="dot"></span>Turning Ideas into Scalable Backend &amp; AI Solutions</div>
+      <h1>Backend systems that hold up in production, <span class="accent">RAG pipelines</span> that retrieve what actually matters.</h1>
+      <p class="lede">I'm Demitrial, a Python backend developer with 3+ years shipping fintech and healthcare applications on Django and FastAPI — and building the RAG, embeddings, and LLM layers that sit on top of them.</p>
+      <div class="hero-links">
+        <a class="btn btn-primary" href="mailto:demitrial236@gmail.com">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+          demitrial236@gmail.com
+        </a>
+        <a class="btn btn-ghost" href="https://linkedin.com/in/demitrial-d" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.15 1.45-2.15 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+          linkedin.com/in/demitrial-d
+        </a>
+        <a class="btn btn-ghost" href="tel:+919025127405">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          +91 90251 27405
+        </a>
+      </div>
+
+      <div class="trace" aria-hidden="true">
+        <div class="trace-track">
+          <div class="trace-line"></div>
+          <div class="trace-progress"></div>
+          <div class="trace-node"><div class="ring"></div><div class="label">Backend API</div></div>
+          <div class="trace-node"><div class="ring"></div><div class="label">Knowledge Retrieval</div></div>
+          <div class="trace-node"><div class="ring"></div><div class="label">RAG Pipeline</div></div>
+          <div class="trace-node"><div class="ring"></div><div class="label">AI Processing</div></div>
+          <div class="trace-node"><div class="ring"></div><div class="label">Prompt + Context</div></div>
+          <div class="trace-node"><div class="ring"></div><div class="label">Real-time Streaming</div></div>
+          <div class="trace-node"><div class="ring"></div><div class="label">Live Response</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="summary" class="summary">
+    <div class="wrap">
+      <div class="section-head"><span class="idx">01</span><h2>Summary</h2></div>
+      <p>Python backend developer with <strong>3+ years</strong> building scalable web applications using <strong>Django, FastAPI, and RESTful APIs</strong>, across fintech and healthcare domains. Strong on authentication (OAuth2, JWT), payment gateway integrations (Razorpay, Stripe), microservices architecture, database optimization, and cloud deployment on Azure and Docker. Focused on designing secure, high-performance backend systems that combine traditional API engineering with AI — LLMs, RAG pipelines, and semantic search.</p>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="wrap">
+      <div class="section-head"><span class="idx">02</span><h2>Technical skills</h2></div>
+      <div class="skill-groups">
+        <div class="skill-group">
+          <h3># languages & frameworks</h3>
+          <div class="chips">
+            <span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">Django</span><span class="chip">Flask</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h3># ai / ml</h3>
+          <div class="chips">
+            <span class="chip">LLMs</span><span class="chip">RAG</span><span class="chip">Embeddings</span><span class="chip">Semantic search</span><span class="chip">LangChain</span><span class="chip">LangGraph</span><span class="chip">NLP</span><span class="chip">Vector DBs</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h3># databases</h3>
+          <div class="chips">
+            <span class="chip">MySQL</span><span class="chip">PostgreSQL</span><span class="chip">MongoDB</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h3># api development</h3>
+          <div class="chips">
+            <span class="chip">REST APIs</span><span class="chip">JWT</span><span class="chip">OAuth2</span><span class="chip">RBAC</span><span class="chip">WebSockets</span><span class="chip">SSE</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h3># integrations</h3>
+          <div class="chips">
+            <span class="chip">Razorpay</span><span class="chip">Stripe</span><span class="chip">Microsoft SSO</span><span class="chip">MS Graph API</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h3># cloud, devops & tools</h3>
+          <div class="chips">
+            <span class="chip">Docker</span><span class="chip">Azure</span><span class="chip">AWS (basics)</span><span class="chip">Git</span><span class="chip">Bitbucket</span><span class="chip">Alembic</span><span class="chip">Pandas</span><span class="chip">FCM</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience">
+    <div class="wrap">
+      <div class="section-head"><span class="idx">03</span><h2>Experience</h2></div>
+
+      <div class="commit">
+        <div class="commit-head">
+          <span class="commit-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="10" height="18"/><rect x="14" y="9" width="6" height="12"/><path d="M8 7h2M8 11h2M8 15h2"/></svg>
+          </span>
+          <span class="commit-role">Python Software Developer — Way2Smile Solutions</span>
+          <span class="commit-meta">Chennai · Aug 2024 – Jul 2026</span>
+        </div>
+        <ul>
+          <li>Developed scalable backend systems using Django and FastAPI for fintech and healthcare applications, improving API performance and response time.</li>
+          <li>Built RAG-based AI pipelines for semantic search and intelligent document retrieval, improving retrieval accuracy and operational efficiency.</li>
+          <li>Integrated LLMs with embeddings and vector search to deliver context-aware, higher-relevance responses.</li>
+          <li>Implemented real-time streaming (SSE) for AI responses, reducing latency and improving user engagement.</li>
+          <li>Migrated cloud integrations from GCP to Microsoft Azure, re-architecting secure file handling, Key Vault, and logging.</li>
+          <li>Optimized PostgreSQL and MongoDB with connection pooling, reducing application latency.</li>
+          <li>Designed secure authentication with JWT, OAuth2, and Microsoft SSO across multiple applications.</li>
+          <li>Integrated Razorpay, Stripe, and Firebase Cloud Messaging for reliable transactions and real-time notifications.</li>
+          <li>Managed zero-downtime database migrations with Alembic and led debugging / root-cause analysis for production stability.</li>
+        </ul>
+      </div>
+
+      <div class="commit">
+        <div class="commit-head">
+          <span class="commit-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 6 9h3l-4 5h4l-5 6h16l-5-6h4l-4-5h3z"/><path d="M12 22v-2"/></svg>
+          </span>
+          <span class="commit-role">Trainee Developer — Dorustree Pvt Ltd</span>
+          <span class="commit-meta">Trichy · Aug 2021 – Jun 2022</span>
+        </div>
+        <ul>
+          <li>Built a microservices-based architecture for modular, scalable backend services.</li>
+          <li>Developed Django backend modules and REST APIs for efficient client request processing.</li>
+          <li>Integrated OAuth2-based user management and JWT authentication for secure API access.</li>
+          <li>Integrated Firebase Cloud Messaging for real-time notifications and improved user engagement.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="wrap">
+      <div class="section-head"><span class="idx">04</span><h2>Selected projects</h2></div>
+      <div class="projects">
+        <div class="card">
+          <div class="card-icon" style="background:none;border:none;padding:0;">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAF8AAABfCAYAAACOTBv1AAAqrElEQVR4nO292ZMlyXXm9zvuHhF3ybyZWfvajV5QTTR2EmhgOATEVYKGRuNIY5LZmM1iplc96I/Rkx60PI30IqPEMUoUNSRIQQQwAAdrL+hudFdVV1XXkllZudwtItzP0YPHvZm191bdkBlOWljmzXtvhMfx48fP+c7nHmJpbnwYsYd8XfSef9z7+ldF3Ed7OsvnM8kvReSu14ev9xFf+dfyfuTXyv8E5dfK/wTl18r/mEQsH4fl18r/BCV85Ge8L8r5tTxMPnrlP1S6EGzxctlJet9wXA5Iy+9D7H63B69FwbT7/ahrOvJtLv4uQNzBa+s+J6C2+JZjGRrLvef86OT9K/8+y37YnSvgQF13s2A4TBR12r0bcWQFCpJzBgnkOw5gCSZ7YGNwEeIu6D7U26T5HpqmFCiprWnbFuc8IfhlbI0FpFyHcgS9EVQjWDkJCaAH0svtU2hFUFfgpAIDpzVIBBfeXwd0+jn4yuKvrIOloZn7+CzfBAxF5SDdWvx2gNBkZacIGAQHkmByEZ3dJjYTRGaMd69DmiBpgukcSXMcEYCkCTPDFomfBeZTR9nfYDA6StFbR8OI3qmnYfU4zIHReaCkoCS10ln/YlQ8CfV0RimKvO8M917Lvy/DPfy+O5TxZQs3uTfX1W4EtGBz0B2Y32Q+uUKabWL1GGlrxFK2mrZBomIp4oiIzEAimvJZZ7PZsp2iDt8a2hoxCpoMcX28r1hdWycc/xScehF656F8GmQ134/5PKBdAqf5eKASu3t8pL4Wqe5hnS1GwRNV/uHGaZdiH2q0RGCGMCeb4ZjJlZ9j7S3a5l2s3aUXBFSxpLgkSFQk5UHiiCh1PrcZurB8tc6yQCdzChN8dmxIm1tUz+Y0YcRe7xQrpz/PxukvwsbTEFaBAdAD556M8hdvPXnlL6Sb3HyApkYt4ooG0lXa+hrN/CY624T5bQqb4y1i2mBqmClOE2hCouKt86tqxNSgqmAOM1u6HoAUExIT3hSvICnikuE04RWUwF4NjS9J/T4rx55n9fnfheGznTtahdQ+xOe/T+U/QD4mn99NvACphjLi0j7MbzDefRWXNvHsUfkZkT2CRZyBmpIQkDxXOMiuC0VQllpZDmOHM8Ms5f/rgW2oU3zq/rlolc5ZkUhMLe1UmV/dYvvauxx//rcZPPObuQPCBlj1RLTyBCx/IXliMRxiC9/fgG6D7EB7mXZ2lXr7MoXNCc5wYpBqkjWAEk1Ry5avZrhk2XoNvIJTQ9uIpcVIEDQllIQzRWPCUotZwgHWJIK67MZMcClRMMdSRMzRqmcvFuymkuGpC5z8+p/CyZdA1zC6rl7M5Z0rEvukLN8OGpMvdPBvcJh0SheyX5d9iDdophep55fwbDMsa6StadtEUsN5utBUgRyCLs6nKN4cYuBMcYuUvbMHNUUAZ+DMIShJBWcOhxJTQiS3T0Ry5GUOZ3lkFqqsxj2sSXAnMnt1RH/9WSh7iBWkGPEuLOeAfH8fPBV4/8q3gwmUQze+VLw4kssxjOEQHIE5IttYe42mfguzGwR/B2lnJBI+OMQLTrPPdhgoFAiGkbp8yhK4mPAx4bWFtu3eWLgdyS/NiIBFcBoIpjitCQjOEmBEHFGUaIKTQDADTQSEFZeY719n78pPSW9+n5XP/AHIOpoSPiySr0Wi9n719mGU/1jprKL720kE9ojtNZr6IrTXkXQHSbMcrUg2HVPDxHAuZbfQWajTbMlmgCuhHKCFY5oMLaBNejDBmqCa0C5Vda6mrKeU2lBZSxDLPYIhuGwvmli4x5z9CkUBliZM97eIty/C/g1YGz34XoUHKvbx8qGSrO6Ckg4aAiDKgU3McOwS43Xq+TXa+XVKmeS4XgSkAK+YtTiXY3dtI9aNZTEOhaeeVkombpUxK4z9iCk95upoU0JQRBOSatAc4VTssWZbrKVtVqSmT02xGEbRIaoUFiEJxgDFk5xhtIhzFMkzufJL1j91A9YvUIR+l7Erorps4weVD2f5i16XA8ULMUcilkDGaLxCM79CW9+EtIfzESeGcwUmRiJiKXU+XFFRMKF1JVEKovSpXY/WCmYM2ZpV7DNi7NeZyZDdpiFZnhFyKBrB8vnKtM/pwVnW29uM4g6raYfh/A79NEG0JlhNYR20sYyesv8UMapCmE/3YHsLjk2hWuveV0yaTgkfHBj+8JbvNOMftBzMwBHaCcRNnN9GmluEuIeTGd4kT5QUmHNo8gCYJgSHdwXRlahU7LnjXG5PcytusNsWTBkwlQGt9DALWBIsCCll3ChixAAqnRspE2+llp5MWPG7HJGbnOm/w/H6EifkGqvtbWgLSiJCkydqTRgt6hrAUfQq8CUMjwAFFrtsncXxcU64h0WBeYSVfvadu7vQ96BzSE1OJ+f7VBYhKOIcWMoYikZMypzNq0cpaaVCyyG3Y4+bdcW77RGucY5dTjDzQxr6JN/LMIFl68QpJkIyoUVJ4lEcyTlMBXNCcC2lTtnW4+zWK2wVK9yxFY7qdY7YbVYZM4gNldQ4aVFrMVFaCcykB8fPwmzKuFGGKyuAoh0Sukj4Pmbla/Z/rYcrO3DnJvHOdeJ0l8I1eJ+g2oPf6OF6I4iJenyLogyICM4HNOV4XTXQuJKJrHI9rXNFj/FLd4xNGWGygVkPj0fU49V3k7MjSoYRkk+oRqJGnLTLOccwnAqYkBD2WKMOz7ItJ7gin+ZYuMbTzWucdpc4aVuMrKVvEROl9oGJGxDXz0F5BIqSYdVDtEHkACD0d1ki3OeGHjEnvE/ld+GlaYbYa6i//T3e/OGPeOP1n6D1FG2nFMGoqgL6iee/do4LX3sWfuM01dE1mG8SrSEl6eaMQEuPfTnCdjjOz7YdN/0ZboWzzMq1ZUJVqIIYIuCcI4oDU6IZySJqbZ78jTzpG4DgTDAElRL1Q3YaYcIqrjjB2K/TOsfU9ai5xgm5ynFrCTqjcYH9sMLF+ZBfvnKTz33+KY6veyq3yK7dEg5f1gTuUvhiHvQ8TB6R4R6K5+kUjmb/d+c2XLrJK//zn7Hzi7fQ/X2a2Q7BO0JRgpQkBqgoddqmOgYv/elLDF46A8enTN0k+84EFoVpOMsb8/P8eLtkb3iSqRthNiASaFwCFKeW5wrxaFKamDLk0CVWogkRyWCaQhNbtDUsGZIENUGSYNqiKU/slWsYyoT1eJPT7RU+NX+VC9MfMUo3mYWSS73P87f2B7w1PcaFM8f5p9/8Os8P+qhOKVwfmAIZRTUrDzJ50w40JEd0nYu6W6+Ptfwujl1MLhqhbuD6Jt/5b/87dl95gw1xDFHWXAecNV2ZxAImjrVwjNubN/i3f/YX/PH5P6Z/dETrspLm1qMuT/L2/jqvT9bZq06w7/u0UlKkkN2H0WH0Kc8PqYakhNiS2hYXI6IZwfTdjUU1fKtIMhJCcD1cKFDXJWzZY9NYn5ohUxkwc31ar3i/yzpDpq7HVXmay+kYeyvnuDxt+Df/7u/5T7/6BV48fYImzRn6AcYMoYO7D1v/oQjwYRHRI5SfFZ+6md1LhKRwbZN/+B/+DXuXLnNyNKLXtriUUKu7EeJwGinTPA/pVNM72+elP3malc+tMA2TjNUQ2GGV1+OneaNeZ2wlUvVxRDxK60uwgIsC6lFRNNUU1jAQGBZG5YRzp08QukmvS5uICrFtiQbXb9xhv63ZqSeksiKRcDhcCihCa8LcetxJJzASTfD0/JipH3DbjjIrjiFScqeB7TtTdr/9Y/7ln/4Rnxr2gIY+PcQiByXJ7k/XZd0LXb7vDFeUZeiIQozs/t33efs73+PUYAWdzXDe4RFwBaYZUMhRyJwUIlfm1/ijf/It1v7kaaJd7aLpAU3qMY7HeWMzsFcdo+gXtG2Dc0bwuU4ralTRILW5U6zh6ZMbHB1WnF5d4Yg4+kCxaO6B2dDGSGtGdeEc744jV3d22G+Nn7z6OlEDSiBRkpKn0cCYAS2naUJJsIba9ZhJnzYVNNFhVtEfnebq3hb/059/m3/2+1/jt06uUOOoyGBfTsnzhL1IPT0PD0UfO+EKkWUfXrvJy3/1N5xxJbq3z+raCGuzOyjwGU/HSC4yi/vcdnv84X/zDdb+o+MQxgSrCPOGImwQy2dw6SSD6GiZU9czQlkRXJ8UDRfn+Djm9HDI2dGI06NVNiph1UGBEog4EgVCoQ8Y1g5aiURqnlsRnllZwwi8dHyFzXHNz99+m4s3N5m3PWBIuXKE2VQRf4JCI2ZCG41ogaRCco7UKr3hcd4Z3+J//fsfM//6F/lHZ0bUbWK9rCDNWcCfi7HoD1XzPoDyO/RsPGHzH37M7OoNTvkCP6qWFSOnDpdydljHCbEP437DM//4Oda/+TQcbSC1RHO0bY/B4CSj4nnOrZziW2fX2ayN25M9tsc1Tevx3lOtBnquz/n1EUfKgg0vFGb0SOSIPhffJfm7wb5DUjmlWBS0LWEEen04WlWcXrvA25u3+dmlLX5y8TrFsMd+UuZ+hUYMiTNi25LIwBs58abWiBUDru41/PVPXufM0a9yvqpIQD2dMBhUiCnu4QWs96h865RvCns1//7/+L/pz2t6gxEUntlsgpOcnJcpw8AxBCZ+RvncBi/8k38EGyVmM5LBvC1IvZO46hw+HOOY9TgmxvFeS9sT2o0h2vZxzlEWUNLF0ZpwKR2EkgheQhf2Ggc4073td7glSOe6G04MRFjtB46dP8qFs2u8+PxR/vKHV6iLEXMRokERE2KCF58RVmkwzSisC57khvzy1i7/53d/zD//vS9DSgyqXhfCQZBHhvjA44AJ0zzJ3roNr75Fc3WTE6N1TI3ZZIqZZutffFygXK0Yuwkv/MHn4DMbQE0NzKOniX2Gq88h4WyuDs0aaPdZsSkbGCeccqoSThSwHucMmn2qekIV5xRW4y3jRmJ01n4PrPug4W3hLhZC4Qf41JLGewysYUX2ePHMKl/87Ar93k3UNolpn+QUC66roEW8RQJgTZOvGjwzFf7mP7zCd195F+89bYqHJh6H6KNh54e/swiVQgnS45f/zw8YjFtcykWIIgS88/kU4qkLYVYl3p28y6kvnODY75yHIw21b4nJ01ifYnCKwp8A1iAW4CqQErSE5PMRa4gdaOV9NqEgGb/rwt6MraR8LArci2OBjS0PXXZYLrzUhKKiGqwgztFzgc3dXxDlVZ67MOHciV0Kv8mUGu33SFKDNERNmaDiSlIy0nyfwgu1W+cvv/tTLm3tM+wPsRQPDMEORUCHX3fG83hIbjyFac3tt6+wKmU+T9e7XgLeBVQgOaUJEdvwPP+1F+BEyWS+STIjqsP5FarqKMgAtOhquuFQo8LdvvuwIhfGcOgwWXTCe5PDp1qI4ahJ7E52wO9RFFt86nzN2RNzyjBmf38LZ0rSRDLBpMz5QtIczyYoB2uMY+Cvv/cf2G4T0ftMfXsPGP/DP7HoJV/Cuze49c67rAwGWTVy94HLSGVySnl+RP/Lz0Pl0Xnsihuewq9QVkc6S7fsGx+eeX8sokCN49bOmKh9QhCq3ibnz+5zbmNGT/eQaFiqCL4H5lCNqEVSCqgWVMEzbxLff+0dXr2+i7oKQw4qXY+YcR/dPQrs7HHz9TepBPpVgTkjOc0+UXKarqKoN+rQ8PRXnoejHna2c/yvQvAVvfIIsAr4PJfkQuv9BfmPURSoLbI7mWHq8Qhxepu13pTnzgrnjxuwTwhZkSllpoOqLecSjZFqOGRPK/7qey+zPXNEV5GWrLkP4vMXrTNj++2LlCnS1hPwCSsUdRF1OfkygTpEWCs49du/Af2GZIleOcRJRVWsIzYiTg20M3cnXcHl/aHhYu6u48NKMqMoAmoJbY2KIdI2DPubnD8/pT/cZWd8BXEJ1VzBEtUOCgdwTJpEXazys0tbvHZjjz0tkaJPjOmR1358tLOzz7uvvcGg9DhHVrgDCdniQxCiU+aFMjx/JFt9WecREhNOPN5XOFkluLVsMZ6OAZAeQT35OMRR4FkdrhAMrI24JHgFL2NWRlOeea5gZW3G/mSTtm2X31tEWwqoCVYMGUvF//uzt9g3n7OjGB9z9UeJAZtb7N26Rb8IGKn7iYjkYMQHB4UyDYmTF87Dmoci4oqMoScTQuhDMYIwXPA28vklE6LuilY+RnE4+jLk1OpJShWIbWbAkTL7wjWcfFo5ca4BmXZkrIUvV8wSqovCvUEY8Hc/vcg725bta0ltf9j1HyUG3Nnl1PoGZkpMueczwqiIgxAMlci8aFg9t54ZaQDO6PV6CAW4Xg4rXQnSUa6tI7y49+d2PkrxCr3kOdIb4TUXd2LHHG1EUNegaYvz5wqOHgFns1yB0wxPwwJxzchlUs9cA//+52+yNYuIlw8x4QJpOmE2n+O8UPV6DKqSQa/HoFcxqEqcF5JvWDld0j/eg9AnTRVTgVAgbgDWz0rvKv5diETX+nta9OAR8FH5+LvOCYQ28tT6KY6tHMf5Ia2vmPtAjdKmFhf3WPUznn+qoix2c6adPGZCahSLCdQQNTyeldERfv7aL7g9neL7qwd09cMX7Y7H3s14Msb7zH1fEv+tS1rIQ48gSGW5fovD+5KkSmpj9vGyAAoWTC/I/M1PzupzQ7L1lwgn1o+zUo3AV6jzuWmS6SxBatbXEkc3BCVhJqhKzvAtK36B56do3NmdsLm7z858klltD5HHKn/nzg7ee5qUSAvini2KHJqHnDPKsoR+P/vxssCLkVJzsEoEQNyhldiwXLHyAZKmj0p8ERAcp0ZHGZX9zAHlgHJo0eO8Y3XNMVp3OIt30WWSdjzSjr6STNmdTvnF5WtYtdKVbR4s78nygQPe++EvH3pZhABVtXQjznU4/1LujWo+WhfygaSbczRFNljlSG9EMECt43f6zKxIivg5q2sCrsmLMtTuciluMapN8NWA1y9fZ6IB/TCW3+v1AAjBd5OsyxQQQMQhknnx1ULxZhmMA9Sso4ssijIgSB4NcoigZAfHY2UJRzwcJ39f4jJR1pM4t36UYJ7UJIa9Ptl8PKpKm/ZZ2yjYWPeMp1vEGKnniagOTXkEWIqoQG2ON6/dZreGaA9L4x81JpZtywvMQihw/t4TdW7jMHdFtaNgG4odWpx2SLOHq/u/AhLEUZiyGioGRQVJaWPbcYMyIhrbmlBG+isJ8XVH8axQy+G0qS71IK5kkgKb+3PsEUnkY5SvFIWjKDy+9PgidCCjw7mA4BHxd0chnZINl9+7y+ff05BflTW74nDJWKPHqD/AYqKd13kyddaF2YmiFNaPBlyoUVW862WEM0VSSsSYsiv2BePGuHrrziNN7PGWHwISwDnD+XuxmJxwhEUHLOBS3JJUpNqALdbPHlb+Ad3uV0NytXVQVHgR2vaA/SzdeoGmnTIYCr6YkyyvBTuoKeRDJFC4gjbCzu78kVd8tPIF1o6vM0k16uakmBnGC9KQ4ljpr1CGkt2tHdjey+GjZas3p0Qdk9I+mSzvH1LeOXQDyw68W5b/vgda/vDSzR3OAUK/v0KQAufcMpQ0i5hFUqrpDwLrGz2MbimqJkgCKS/CsJTwIvTLIVtbuwfm9oA2P1b5g/URrsqhVVEs2LwHMpnNwDy+gXhz+54Kk5J0SozTLvNdELDuOT5p6TS0uLNwb4SyVFrKZKjuUKsRFuy43InapkwIi2RO6UMv+rhiioCcPAH9PuICg2qQfXi3fso5A28EB0xqbl68li2/qzi5jksZdY6lfWB6wOTqGvCJyz0GcDh8VgHTx4+uHIZLznrbNq+Ijy1t+2GANXGwsYb2Ksx5QhEQl9kM6jKqORiWVMHha2V2ax90UZHKfHsPYDXJ9sH2Din/V0Dxd0kerWbWLcKT5Wp27WJ6sxy9HRyuWxd2UKtNMZFS6n5/KOUD/QFPv/gi87plvDvGhUDykbz5REOMDYUPDFzFdHOfyS8uAaFjCbddtNCS4p28d8LhsPS+uuYHVdyHkEOKg0WqIpkJrQcdkLpOOSzSURkX0rYt/UGfEArM7BAEzQNzk8dbflmwdvI03pf0+5n8Kr7D9SWicQ6aKENJmif2b2xDK9SzKfN23q0ujEQb0+rugeXfc9O/KnJg5bpU/HIEYERNeelpUlQPiiWLzzRNg3ak3UwweLg83vKHqxx5/gLRjMnePqp59SAS8d06/EylCDRN5PqbV+HOhH6/QkKGn8Ul1KbEZg845Hbk0HUeVOH+OETuCXnveq3LQ7soJcZIbBNtm2gbJSUQkWWcP5vWNE3EzHD+0ep9jOk5KAo4eYJifZW2MKKk3JAi13FxmUHsEQYukLb2uPPaRUglZTFAk3VFhQkp7ZJp1XNwCwr1+9XWRysm5PvpVrYngUiuU7ditJKIkucANSMly0RchZQiZkpKDUZLb1gRqpLQqxgMB4xGK4+89uMtH4H1FZ5+6UXG/YR6wQRSIaQC1Bt4CE5ZCwVhe8Lt165g21AVJ8EqLEUKmxLSNsyvgdsBmXchm95/zQd0yJMYGAaIq2icEgUcJVe3rtO4SCNGI4lGjBYjYqh6UhT292c5j+nmBNWI0VI3E1Il1CiT2Yxhv3/oBu7NSx6H7Qgd4pVY/9wL7FWOGAwvedZXp5jvuE1OEFNWfMnN195h942bsG/0pCAvSZ5ibo9Wb4Heycrn0dHAkxZxjkiLITREdhmzNx/TihG95kXS3ZEnYs/m1oxmnpNI5xfRUQIiKpGoSquJwhtHRsNHKvixM55JgrKA5z/L0edfJEleVu8VCgt4DHGJ6BR8hmJXreDy3/wIru5krqPLzOXk58zaLTRtk7d46dgPfDLBjnZoq8NRE9ls7jCeT7u9gTIzb0HoUhxqJXc2jVgP8FJlKrweZig4RA1taobeOHNs7ZGj9bHKFwR8AVLwxd//Fo0LJMkwrBjdcIrLKGZluMLI93G3xlz7dz+AiTGg7JZ/RlTGNHEH4hi0feS1n7TIggiMMSex044zJ8nsQPFL2KMCHdDMe5BGOFd2mH7KDGhbuKAE7ZyBazm20vtwlt81E9bX4elPcfLFz7OXwFc9qipQDQLqc7YrAnVdU1Bwslhn/OYtLv9f30f2oG99KhcQq1GbYrEB/QC2/hFDEx7HPhNmRN7ZvsUsNkRTZvWcWT1nfzKhqQ3v15lMCrZvRTT1mU9ajNTtA7TIAwSNLfX+Li8+fYbzRzJLelnnuCdPeO+BtvNw9BjnvvRbNCtrTFOCQkguoiGHY4sFa2aCtI5h6nP9R5e48ncvQxoQ6C2ZxrmG+wnzBYFGawKBW80uV7c3aR1EdFleFmcUoWS673j3ypS2KTAtcm06SVetO1h31e/3GQ1Knj17hFIOKlwPkscrX0MmtWrKHfCFr7D27AvsxDlzqalDRH0urnsRkoPkPU3IrONTeoSb332Lzb/+KcwLiuS6JTQlB1sufnLiO8dzZfNdtqY7NGJEU5IJibwFTVUNmew7Lr21Tdu4JWoLDnGG7+AGcOyPd+lXnt968QJDR2doD5bH8HZcp/iQqR/Ow2DAp3/nH2NH1thpG0wOSoAppaUric6BFKxqwelinWs/fovN7/yMatajagKiHUSxWMrZHQ92J/qQ496PLVBT7Q4O0nlT0AbiHNp9aHaRtItzNdfHN7hy6xquX2XjkS7+x2FWMpt5treN/T2HEbBDPNWlqiTbeCnGqWNrnD61gZNFHePBEh7JEtNDE44LZNx4Dp+9wKe/+Q0ufffbtONd+i6gSRAVCo2oeBIB8SFTL1BGznPjB29RNH3Wf/M0nG2gN+to9t3ihcNQbqcAubfkeF/4sPhORztI3R48YkCAYpUcVTUw3YPrV2C+B/WE5BPvnD7G929c5tbkNts2o7+xklkaZogFynCUrU3h6jsNxipRXIdZtYgl0LzNQMRAItP923z1W39I1YeE4p3d3WhjyeB4/GpEyUpJAkYg9PsQlY3f+0Muv/EGO7d3WF/t06v6jMdjgvm8MsYL4hZ1XKOXPNJ6fvn3L/PMvM/R316Dp4aZgo7PLTLNndxhbQe1Xsf9FnTPoDXXcUBdntiaObRTmI1hukt78zKbF19l7+IbVLFGtebqIHDxwjO8VXnc+grHBqvst1Og281KezTjHpffnrK9WVKGo8SY4RLQDCtowExAlZLIaKXiyy88k8lUD9DuYerM45XvtbvVrACL2SLwfb70X/wLXv3v/0fm032SRFzI62YF8K4lYbSVR8XjMUrg3Poa7/70ZepbY868NIFzn4H1Y7C23vF6HEky/ToP5IgQ71f2QvSQ5S/6ycidKBO4+FNmL/+QW2/+HN+M2fCOuvBMB6uM+0N2eo7ZINDEmrRfE4IjiCEYvi3YvCrcuQJpP9Af+Gzt5ITLKElUCNCLewx0wu98/gJffGpIUbeEEHJV5SEVt/e494IeDJzQA8rsIp45yov/yZ/wk3/7Z3D7XU72+yieyhsqNb4QrDAQIWgHs07GrBrMLr3NL29us/GZLzN69gLFM8/BaB3prRKKXuZ1sqCdPLxdaOw+EyG2eSfarRvsX32H+sYlLn/nLzkdak77hPPKnTZS99a4ORpy69gatypjWoGmLt237BecGZI8r7/8DlafZ3VwhHqeEKeEkF2NSqYwFtoySHNW05j/8o++Qb+FKjwYtZX34nY66lP+wvJ/mdKtKOqHFCnCb36VF9S4+hd/jptMsdJIIRKcodZQtQXqCloPiFBKQWUKZSTJHpM3v8/4nZ8z/PlJ1s8/S3jmGTh5Eo4eA/Mgw7xm64GNjJBmMB/DfB+afSav/YS9G++wc/MaRao5M2jpRSVqJDnHtOyztbrBW2dP8c7JDW4VcxqXCOIptKtcmcuxhjjapDhxzKZTqnKVEDxKAnEEc9CMcbM9RtU+//W/+M94aj0wdLGbvjqW8r10TVv8tukDU5XDXCzphv+icKAGSolD8TaH3W14+RUu/sWfU6QJhe4T9A6iLc71iaFkUuR+7sdIoZEU5uSFFRVJHXUCG6wyLQtsbYPBuTOsnTrHkaNPd2Hpg5Wftm4yu3OTOzeuMN3ZJDT7FGmOp6E0xePzHp0Ce2XJteGIS8eP88q5s9xY7zMvGswS/SQUGazNVEjncHHEnbcLrr0ZqSfreAbM6imL+SeYsuornju5xr/+z3+fz56vsuJ9t/GT2t1BxCGDfqTy8825gxt3c8wyHJBryfn/iQbvIqSGO9/+Cy79zf/GaTfnaCm0symtOiZFyVY/4AxOjSM9ndMUY6JTjB4mBVIUqAtMZnOqlVVqjYgvcFIuw7i7b0EJzhFQXIrEZk7SiBcjOI+IEUwJqkTn2C17XF4b8vLpI1zeGHFnsMGsKklFS6BTfnJLtxCDo4qOI/vGp0afYVR9iVd+do3ZPBsN0lCo8lsvfJbPPvsUZ48FJNb0SyXvutVx+e3eXObg78csgnadg7IlziGL+BkFAl7yFi/zOGfj936PjXOrvPVn/wtbVy5xcmODWWFs9QNvrw0wE+YucXQeKCQSUo3vaIPeO3zhCRqIkztUCkeObLA73rqbXMvi2plPsygW9TBwuZOs+0TtAvtFYKcqeXfY49L6kIvHVtkc9ogCSgsxYmLELq714kkmRAlUKEdL4+sXTnKsf5qvPPNUDjwkh5VelSNVRR9o2jmxHUPZY7n24DFyv+UffrWoOS6waIMcR3a9pyH7YzHacoKXMY4x/PiHXP7bb7N57TJx3fHmWsXfH10j9UdcuA2f3pvy7PgWJ+oJ/RgJ4mg8qF8sOta8CyBk2Brw94zPtFgN6fNdLtjFdNCACWxXAy4NT3FxbYWLxwJbqxVNVTHvFmQ466DwDsH0LlC4kjoarqxYm8J/9eLv8sLgNDBAU0HhF1v7HkzQDs1GCRnpvEs6XS06Qw9ev4ddRw5xbRYdcldnZXqICiQCVQrIl7/O0+unaH/4d/zVxR9yZb3Pu+dPsZ08Y4w7pWenbHh6FjjVNqzEvBugt7xnmU8s+TByOJQ8JMFcrqSRH4SQnKMRR+0Ds8IxDY4bgxXeGI24vLHGzaOBSU/wMdO5vRjWbahgZph4okJVVhRNQsbK589+hvOD88utDaBGNHYE4W5lykIxS0t/73jVB99jTQC/IBApiwcIiO9ngtSnnuOZs8fhpyN+8Mufcmt/n7bqUa96NocFb5zc4Oys5IWdCU+Na47PlSN1Yr3OvjTzx5Qi5UXWrTvg9ovlibFI0EpL62DuA3tlj5uDHjcGPa6vlLw7HHBz1Gc2CMQgoJarcLKgF3U4jUGh3cqXFnrR8UzvBL999jOUPDhk/CjkQ+6rqaiPmNCt1FYahNIPAc9uWcCFz3Dt8qsMRuvM4pxtp9wRo8Bz3fep+0O2x3OOTRuOzRuOTRtW24ZScycUKd/8QmGQ3YW3XHudB2VSOiah5E6vx83hkJv9AbeGJduDgsmgxAJUyXBqtJ0eF/GTisN33JsiBfw4sRYr/vDLX+EkQ8Lh1TPm3pMvf6Dc640MwnvGxLt592ABW672yJKF4PDOoSpEPAmYMuS1d27SXz2Kx+PF0bIoRgf2peDHznhl6AnDgmEsOC4DjjWR4xFWm0iZlCppp6Cu3Z31Trxnv+qzX+aJdVIEJkVJ7QLqCpJBaPIe+oVmxNV89u8WIZhQeE9wAYuGThPP9o7zra99k+eLM8zme5RlyAmXLJh4i91OFnp5jAKXn7v/rfdn+YsOgIP41eTg+kLugO6jjsig6ueHDDRNfhCDywV4S455cEwEovMgnsIKrqSWI6niaDTWotBHKVQpTRZIB1GMmkTtArNqyCSUTEqYB5cfOqOOSgVvSqGJoIZzQqLj1ywaq4IrAlYb7Lcc92v87osvcSaMgIYjvbW8z4LZ45X8AeSDu51l6GnkpwDRwcNK0Pz3MESO9zwhThmbQa+XJzqB5JuORu4IBj5lv4sW7ClMnXGrF+iJ5Li948Bk1pgiHXQtTkhitF5ITlFaTByNE0rLRFUTh7nsuqRzWUYeCU2biDtzvrT2FP/spf+Y82xgbUuMQFkBs25y/VVSPhzg5Q+Kw00pgCOhpGqV3WRIlbccSku6dPdpIT9UAEcSR/IwdeS1deLymopCOFho4QmWH99RSN50Q70eImNkl2iLCq3k86p0Ialll1MlxwoVv/nCF/jmU1/gHBv0WXS0w7TFyePwpQ8u9yv/Xh91r2KXr3X5eukO4QA5EkHwfPnMl/ir/k/ZTXeYWAYrBAiaCxLzAK3kiS8oeM3Rh5fMl4xEBMHFvMrFic8TvXPdphvd5zswLEDedqz7/mBtRGwaYkx4yfsPSpuQac0o9viTz3yVr5z/HCcYodSICnJ4HZXQcfcfHPHcvzb4XiDn4TP0h452Hjj7d2UpwXGSEX/w2a/xi+/871TlIFe7cBSWH3LgVe+6L5X8dAig4wfB4jEIB7kGLIpAqduAT8TnJ0As2oUnmbG9s0fR4UrNZE6ZYGSBz554ht99/qu8WJxn3VZAW5wv7i/qP0FG3YeL8x8pjgrYUPinT32D1y9c5W/feZlmKKQyswZc57aSO5jPFgsNnEk3aUu3MK3rkLs+d5AEOjKIlSxT/kQUxFH1B9TzljRv6EU4WqzwjWc/yzfP/gZPcYKKFYiZ/PpRr3B/nDzRpwWJQd+tIcz5V1/9Y0jKD669QZMU8YHWK/rQFsgyKjHJEEOePPO7GWG1ZT55eAsHZ3msBHW4iaLbU04MRnzpmU/zpTPP8sXqac4zAmY5IQy5INLMZ5S9QxS/JywP30v5QRzK9yNL3r0DLzTAbeZ8784r/MOV1/nBmz9nS+bs9qBaX2U8HuNFqKqKWOenBfngcM4t27JYNeI8eOdxYgQFJ0IlgVIc82nNsDdkPqkpWs+F9dN88fSzfPn8C5wLG6xR0KN7ZIZxP33l/Vr/43ZKudfnH6LGP1nlLxabAaiiwbjOmJtMuNJs8aPLb/LW/iavvvM2dduA90QxBqMBUjjmzYyi8CweDSLi8N1aYFXFJaO0DodvMyS8WgzoiefEsZM8f+opXjr1IkepOEIgzCKDanCoke4+ItMTVf49axKeqPIzDu/oducFp6QAO0wBYUzNlJort6+zORvzxs2rXJvc4creJlvzMeoNX2X49uBeBBGPd46CgrQ94czoOM+feoqnRid55sgZzqwd4bg7SolQAD3kAKOxRdLUnTA95sY+7B5Ahx/P9/Eqn075LitfFPOJ5BKRlvlsRr/fx/CMaRmTuM2MCcYuNbvtHje23uUworm3t8dwOGA0GrHaW+V4OWKFkhUqVukxoscKJRWBzJ1IHatsMQLTMhrD+FVV/r2v32cjlk8D7WJhBSxhTlH0rupah4ST2Y8dXQ+Wk6wcaox031i858ggrseRt6rIJ3bd4rZcZNeDVYbB5z0hFsb/oH2Y4T6lP2xHlPsipEP3Ddy9Ap9Du658HM/DXZKeDrnXeze56GrrhGUs322WCg9EA/NJ9O7fi/fknpd28JXMPP7oYYL3Jvd3cnhiScSDLOWuzS/uacz73GXw45LDFm9yfy5w14gw91B13l8K/aRZqv8/kiexEVN4uP4/+ouJy3iLHHL48gQ3uJPuKZQiroM7ngQ2+V7lgEa+GPW/tvyPW97zIuhfyxOV/w9uWjbulSAxngAAAABJRU5ErkJggg==" alt="Meii AI logo" style="width:42px;height:42px;border-radius:9px;object-fit:cover;">
+          </div>
+          <h3>MEII AI — RAG model (AGRATAS)</h3>
+          <div class="tech">Python · Django · FastAPI · Node.js · MongoDB · PostgreSQL · OpenCV · EasyOCR</div>
+          <ul>
+            <li>Semantic search via RAG, storing embeddings in MongoDB Atlas for context-based retrieval.</li>
+            <li>AI conversational interface for querying extracted text from uploaded documents.</li>
+            <li>Secure file management using Microsoft Graph API and SSO for OneDrive / SharePoint.</li>
+            <li>Real-time streaming (SSE) of queries and LLM agent responses; ADK and MCP integration for agent interoperability.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-icon" style="background:none;border:none;padding:0;">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAYAAAByDd+UAAAC9ElEQVRIDe2Vz0tUURTHhf6AaNkf0Lwf80bKLIpw7zICF+FKN83oTIRikVDCMJLhogyCTE0jKDWxmJ2l4aJQI3BsKBIy0AyihaFkjcO8d+JzxxsSOvOc2tXA5V7ufed+7/d7vudMWdn/3z+jwKEb304f7/LGKjtcj+G0ZSR4MffdbvaeGTGp/WtCHO1dP3niVk6OdblS2enOVSbcdqdV6hnWWblqN3uvrXMiRswTM5Y79UfAVQO5O4DB7HD3yt6dLgtFZJ8R85KBsEig0e3f6buC+xoMKQt+uOUQaUsC1TIyb7nP1xJZzQsbu5MXGSuurw+Xd/y4rUarN0POuAgWOmdGg8iBsJwxYtICM/aR14yvjZhXVjxfL0RCDFIzLHsOtrlDjPJNwDyQ1GIQoyVTbYRlA0AlY1O2B9fyQGKta1/EVzqU9TvdOV63I2CDCA4FCED1kJZMtZn4+gJ2xFrdn+bsvo/jRVlSYxXtbkIDYnszKou4UDHTxgjLhAZUUm8Ckgpizb6ldvvBQnFZVVG3Sj1BwUvZI7weqwPKUDmKyiLnuuity2tv+RY5AVJngwt1wUfzwrrgjw6CQfgIMzBYKwkbZIjcBZhjXtKMr0Y5Q0br5udRNQaWIuzZj9/VOePp4gxJPJfnAb1kICJTOl+scSnSBpqyPTwOY2AQBda7nLXvf1A5dMbeJHwBIhN5AxAmgXyuyNeEcT5jMFSdxVejWB+WVu9y1hpYigQH37+0R+eHiHUmUynn+exT1gV/us6wtgbUbYt8qj7alhHAYMZlAGIQcuY8Sd8jNjT1SkKzMzUFwfShkgx2jW4/Mual9JLq8vb1/YDBFCC6EWD2w/kqGAHopKfvhlLTxQ2jAWlPWN5P94eNjmOGFWC+2elgxc4nqI7RYDDUe7uaVf3RiONrI4X+njhDTpiVDKZfprr/pkFoV6qDDC7UqTrD+pOplDJIKTJqkO1m6o3e+MuN42mPOlPM/Lpxu4tL2fvdOKXc8T+mZAV+AspJXJ8jPjHaAAAAAElFTkSuQmCC" alt="Wi-Zone logo" style="width:42px;height:42px;border-radius:9px;object-fit:cover;">
+          </div>
+          <h3>Wi-Zone</h3>
+          <div class="tech">Django · MySQL · REST API · Stripe · FCM</div>
+          <ul>
+            <li>Backend for a media marketplace with multi-role RBAC — admin, vendor, buyer.</li>
+            <li>Payment, subscription, and advertising modules with automated notifications.</li>
+            <li>Owned end-to-end delivery, including client requirement gathering and Git-based release management.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/><path d="M3.5 12h4l1.5-3 3 6 1.5-3h5.5"/></svg>
+          </div>
+          <h3>Sporty — health management</h3>
+          <div class="tech">Django · REST API · Postgres · InBody WebAPI · ZohoPay</div>
+          <ul>
+            <li>Multi-level RBAC for administrators, students, and parents.</li>
+            <li>Zoho Payments integration for subscription plan management.</li>
+            <li>InBody Web API integration with dynamic, JSON-driven PDF health reports.</li>
+            <li>AI-powered health report interpretation using the Gemini Flash model.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="education">
+    <div class="wrap">
+      <div class="section-head"><span class="idx">05</span><h2>Education</h2></div>
+      <div class="edu-row">
+        <h3>Bachelor's Degree in Computer Science</h3>
+        <span class="meta">Sri Lakshmi College of Arts and Science · Jun 2018 – Apr 2021</span>
+      </div>
+      <div class="edu-cgpa">CGPA: <strong>8.82</strong></div>
+    </div>
+  </section>
+
+  <footer id="contact">
+    <div class="wrap">
+      <div class="section-head"><span class="idx">06</span><h2>Contact</h2></div>
+      <p style="color:var(--muted);max-width:560px;">Passionate about designing performant APIs, intelligent AI workflows, and scalable backend architectures. Let's build something exceptional.</p>
+      <div class="contact-grid">
+        <a class="contact-item" href="mailto:demitrial236@gmail.com">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+          demitrial236@gmail.com
+        </a>
+        <a class="contact-item" href="tel:+919025127405">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          +91 90251 27405
+        </a>
+        <a class="contact-item" href="https://linkedin.com/in/demitrial-d" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.15 1.45-2.15 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+          demitrial-d
+        </a>
+        <span class="contact-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Chennai, IN
+        </span>
+      </div>
+      <p class="foot-note">© 2026 Demitrial D. Building performant backends, intelligent AI applications, and clean user experiences.</p>
+    </div>
+  </footer>
+</main>
+
+</body>
+</html>
