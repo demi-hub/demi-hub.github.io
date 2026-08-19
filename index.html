@@ -50,8 +50,15 @@
     height:68px;gap:16px;
   }
   .brand{display:flex;flex-direction:column;line-height:1.25;}
-  .brand-name{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;letter-spacing:-0.01em;color:var(--text);}
-  .brand-title{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--amber);letter-spacing:0.01em;margin-top:2px;}
+  .brand-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+  .brand-title{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--amber);letter-spacing:0.01em;margin-top:2px;}
   @media(max-width:520px){.brand-title{display:none;}}
   .navlinks{display:none;gap:28px;list-style:none;}
   .navlinks a{
@@ -72,13 +79,13 @@
   /* ---------- HERO ---------- */
   .hero{padding:80px 0 56px;}
   .eyebrow{
-    font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--teal);
+    font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--teal);
     display:flex;align-items:center;gap:9px;margin-bottom:20px;
   }
   .dot{width:6px;height:6px;border-radius:50%;background:var(--teal);display:inline-block;flex-shrink:0;
     animation:pulse 1.8s ease-in-out infinite;}
   @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.35;}}
-  .hero h1{font-size:clamp(32px,5.2vw,54px);line-height:1.08;max-width:760px;}
+  .hero h1{font-size:clamp(32px,5.2vw,33px);line-height:1.08;max-width:760px;}
   .hero h1 .accent{color:var(--amber);}
   .hero p.lede{
     margin-top:22px;max-width:600px;color:var(--muted);font-size:16px;line-height:1.7;
@@ -241,7 +248,7 @@
   <section class="hero" style="border-top:none;">
     <div class="wrap">
       <div class="eyebrow"><span class="dot"></span>Turning Ideas into Scalable Backend &amp; AI Solutions</div>
-      <h1>Backend systems that hold up in production, <span class="accent">RAG pipelines</span> that retrieve what actually matters.</h1>
+      <h1>Backend syeyebrowstems that hold up in production, <span class="accent">RAG pipelines</span> that retrieve what actually matters.</h1>
       <p class="lede">I'm Demitrial, a Python backend developer with 3+ years shipping fintech and healthcare applications on Django and FastAPI — and building the RAG, embeddings, and LLM layers that sit on top of them.</p>
       <div class="hero-links">
         <a class="btn btn-primary" href="mailto:demitrial236@gmail.com">
